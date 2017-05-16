@@ -10,7 +10,5 @@ import UIKit
 
 class FilterOptionsCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var filterOptionButton: UIButton!
-    
-    var optionType : String?
+    @IBOutlet weak var filterOptionButton: UIButton!    
 }

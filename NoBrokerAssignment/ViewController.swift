@@ -15,8 +15,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var flatsJSON       : JSON?
     var flatsArray      : Array<AnyObject> = []
     var start           : Int = 1
+    var totalCount      : Int = 0
     
     override func viewWillAppear(_ animated: Bool) {
+        if FilterHandler.typeFilters.count > 0 || FilterHandler.buildingTypeFilters.count > 0 || FilterHandler.furnishTypeFilters.count > 0
+        {
+            self.flatsArray.removeAll()
+        }
+        else
+        {
+            
+        }
         self.getData()
     }
     
@@ -28,9 +37,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.tableView.tableFooterView = UIView()
         self.filterButton.layer.cornerRadius = self.filterButton.frame.width/2
         self.filterButton.addTarget(self, action: #selector(ViewController.setFilter), for: .touchUpInside)
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(ViewController.setFilter))
+        self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if flatsArray.count > 0
         {
@@ -54,7 +67,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     {
         print(indexPath.row)
         let lastRowIndex = tableView.numberOfRows(inSection: 0)
-        if indexPath.row == lastRowIndex - 1
+        if indexPath.row == lastRowIndex - 1 && indexPath.row < (self.totalCount - 1)
         {
             self.callTableViewReload()
         }
@@ -130,7 +143,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         if FilterHandler.typeFilters.count > 0
         {
-            self.flatsArray.removeAll()
             var val : String = ""
             for i in 0 ..< FilterHandler.typeFilters.count
             {
@@ -140,7 +152,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         if FilterHandler.buildingTypeFilters.count > 0
         {
-            self.flatsArray.removeAll()
             var val : String = ""
             for i in 0 ..< FilterHandler.buildingTypeFilters.count
             {
@@ -148,6 +159,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
 
             urlToUse += "&buildingType=" + val
+        }
+        if FilterHandler.furnishTypeFilters.count > 0
+        {
+            var val : String = ""
+            for i in 0 ..< FilterHandler.furnishTypeFilters.count
+            {
+                val.append(FilterHandler.furnishTypeFilters[i])
+            }
+            
+            urlToUse += "&furnishing=" + val
         }
         
         urlToUse += "&pageNo=" + String(start)
@@ -172,7 +193,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 for i in 0 ..< self.flatsJSON!["data"].arrayObject!.count
                 {
                     self.flatsArray.append(self.flatsJSON!["data"].arrayObject![i] as AnyObject)
-                } 
+                }
+                self.totalCount = self.flatsJSON!["otherParams"]["total_count"].intValue
             }
             DispatchQueue.main.async(execute: { () -> Void in
                 self.tableView.reloadData()

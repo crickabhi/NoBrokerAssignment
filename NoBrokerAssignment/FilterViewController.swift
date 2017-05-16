@@ -165,7 +165,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     
         if FilterHandler.selectedFilter.count > 0
         {
-            if FilterHandler.selectedFilter[FilterHandler.filterCategories[0]]!.count > 0
+            if FilterHandler.selectedFilter[FilterHandler.filterCategories[0]] != nil && FilterHandler.selectedFilter[FilterHandler.filterCategories[0]]!.count > 0
             {
                 let arr = FilterHandler.selectedFilter[FilterHandler.filterCategories[0]]!
                 FilterHandler.typeFilters.append(arr[0])
@@ -175,7 +175,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     FilterHandler.typeFilters.append(val)
                 }
             }
-            if FilterHandler.selectedFilter[FilterHandler.filterCategories[1]]!.count > 0
+            if  FilterHandler.selectedFilter[FilterHandler.filterCategories[1]] != nil && FilterHandler.selectedFilter[FilterHandler.filterCategories[1]]!.count > 0
             {
                 let arr = FilterHandler.selectedFilter[FilterHandler.filterCategories[1]]!
                 FilterHandler.buildingTypeFilters.append(arr[0])
@@ -183,6 +183,16 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                 {
                     let val = "/" + arr[i]
                     FilterHandler.buildingTypeFilters.append(val)
+                }
+            }
+            if  FilterHandler.selectedFilter[FilterHandler.filterCategories[2]] != nil && FilterHandler.selectedFilter[FilterHandler.filterCategories[2]]!.count > 0
+            {
+                let arr = FilterHandler.selectedFilter[FilterHandler.filterCategories[2]]!
+                FilterHandler.furnishTypeFilters.append(arr[0])
+                for i in 1 ..< arr.count
+                {
+                    let val = "/" + arr[i]
+                    FilterHandler.furnishTypeFilters.append(val)
                 }
             }
             self.removeController()

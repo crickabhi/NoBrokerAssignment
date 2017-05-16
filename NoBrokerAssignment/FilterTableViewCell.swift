@@ -62,7 +62,7 @@ class FilterTableViewCell: UITableViewCell,UICollectionViewDelegateFlowLayout,UI
         let itemWidth = (collectionView.bounds.width / itemsPerRow) - hardCodedPadding
         _ = collectionView.bounds.height - (2 * hardCodedPadding)
 
-        if display.count < 4 && display.count > 1
+        if display.count < 4 && display.count > 2
         {
             return CGSize(width: 150, height: 50)
         }
