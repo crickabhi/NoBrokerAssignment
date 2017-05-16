@@ -20,5 +20,7 @@ class FilterHandler
     static var typeFilters          : Array<String> = []
     static var buildingTypeFilters  : Array<String> = []
     static var furnishTypeFilters   : Array<String> = []
+    
+    static var shortlistedFlats     : Array<String> = []
 
 }

@@ -113,7 +113,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             cell.flatImage.image = UIImage(named: "NoImage")
         }
 
-        if cell.FlatLikeButton.isSelected == true
+        if FilterHandler.shortlistedFlats.contains((self.flatsArray[indexPath.row] as AnyObject).value(forKey: "id") as! String)
         {
             
             cell.FlatLikeButton.setImage(UIImage(named: "Favourite"), for: .normal)
@@ -124,15 +124,35 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             cell.FlatLikeButton.setImage(UIImage(named: "NotFavourite"), for: .normal)
             cell.FlatLikeButton.tintColor = UIColor(red: 139/255, green: 139/255, blue: 139/255, alpha: 1.0)
         }
+        cell.FlatLikeButton.tag = indexPath.row
+        cell.FlatLikeButton.addTarget(self, action: #selector(ViewController.shortlistFlat), for: .touchUpInside)
 
         cell.FlatCallButton.setImage(UIImage(named: "Call"), for: .normal)
         cell.FlatCallButton.tintColor = UIColor(red: 247/255, green: 27/255, blue: 66/255, alpha: 1.0)
         return cell
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
 
+    func shortlistFlat(sender : UIButton)
+    {
+        let buttonPosition: CGPoint = sender.convert(CGPoint.zero, to: self.tableView)
+        let indexPath =   self.tableView.indexPathForRow(at: buttonPosition)
+        if indexPath != nil {
+            if FilterHandler.shortlistedFlats.contains((self.flatsArray[sender.tag] as AnyObject).value(forKey: "id") as! String)
+            {
+                FilterHandler.shortlistedFlats.remove(at: FilterHandler.shortlistedFlats.index(of: (self.flatsArray[sender.tag] as AnyObject).value(forKey: "id") as! String)!)
+            }
+            else
+            {
+                FilterHandler.shortlistedFlats.append((self.flatsArray[sender.tag] as AnyObject).value(forKey: "id") as! String)
+            }
+            self.tableView.reloadData()
+        }
+    }
+    
     func getData()
     {
         let loadingNotification = MBProgressHUD.showAdded(to: self.view, animated: true)
